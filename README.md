@@ -1,0 +1,113 @@
+# Neo-Mail
+
+是一个学习性质的邮件库，基于Socket套接字编写。
+
+
+
+## 快速开始
+
+```java
+/**
+ * 可以通过 properties文件读取配置
+ */
+@Before
+public void readConfig() {
+    Properties props = new Properties();
+    InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("mail.properties");
+    try {
+        props.load(is);
+        username = props.getProperty("username");
+        password = props.getProperty("password");
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+/**
+ * 发送简单文本邮件
+ */
+@Test
+public void sendTextTest() {
+    NeoMail neoMail = new NeoMail();
+    try {
+        neoMail.config("smtp.qq.com", username, password)
+                .subject("这是一封测试简单文本邮件")
+                .from("Neo")
+                .to("me@neow.cc")
+                .text("这是内容")
+                .send();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+/**
+ * 发送简单 Html邮件
+ */
+@Test
+public void sendHtmlTest() {
+    NeoMail neoMail = new NeoMail();
+    try {
+        neoMail.config("smtp.qq.com", username, password)
+                .subject("这是一封测试简单Html邮件")
+                .from("Neo")
+                .to("me@neow.cc")
+                .html("<h1>标题</h1><div style=\"color: blue\">内容</div>")
+                .send();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+/**
+ * 发送 Pebble模板的 Html邮件
+ */
+@Test
+public void sendPebbleTest() {
+    NeoMail neoMail = new NeoMail();
+    try {
+        //使用 Pebble
+        PebbleEngine engine = new PebbleEngine.Builder().build();
+        PebbleTemplate compiledTemplate = engine.getTemplate("test.html");
+
+        Map<String, Object> context = new HashMap<String, Object>();
+        context.put("number", "1234");
+
+        Writer writer = new StringWriter();
+        compiledTemplate.evaluate(writer, context);
+
+        String html = writer.toString();
+
+        //发送邮件
+        neoMail.config("smtp.qq.com", username, password)
+                .subject("这是一封测试Pebble邮件")
+                .from("Neo")
+                .to("me@neow.cc")
+                .html(html)
+                .send();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+### Pebble中的test.html
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="UTF-8">
+</head>
+<body>
+   <div>
+        <h1>这是一封测试Html的邮件</h1>
+        <div style="font-size: 16px; color: gray">
+            如果你能顺利地看到数字：<span style="color: #409EFF">{{ number }}</span>
+            <br>
+            那么表示程序成功运行了
+        </div>
+   </div>
+</body>
+</html>
+```
