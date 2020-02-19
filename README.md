@@ -2,6 +2,8 @@
 
 是一个学习性质的邮件库，基于Socket套接字编写。
 
+支持群发，抄送、密送。支持发送Html及Html模板的邮件。
+
 
 
 ## 快速开始
@@ -85,6 +87,26 @@ public void sendPebbleTest() {
                 .to("me@neow.cc")
                 .html(html)
                 .send();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+/**
+ * 群发邮件，包括抄送和密送
+ */
+@Test
+public void sendCcAndBccTest() {
+    NeoMail neoMail = new NeoMail();
+    try {
+        neoMail.config("smtp.qq.com", username, password)
+            .subject("这是一封测试抄送密送的邮件")
+            .from("Neo")
+            .to("mail1", "mail2")
+            .cc("mail3", "mail4")
+            .bcc("mail5", "mail6")
+            .text("这是内容")
+            .send();
     } catch (IOException e) {
         e.printStackTrace();
     }

@@ -18,7 +18,9 @@ public class NeoMail {
     private String html = null;
 
     private String from;
-    private String to;
+    private String[] tos;
+    private String[] ccs = null;
+    private String[] bccs = null;
     private String subject;
 
     public NeoMail() {
@@ -34,10 +36,21 @@ public class NeoMail {
         return this;
     }
 
-    public NeoMail to(String to) {
-        this.to = to;
+    public NeoMail to(String... tos) {
+        this.tos = tos;
         return this;
     }
+
+    public NeoMail cc(String... ccs) {
+        this.ccs = ccs;
+        return this;
+    }
+
+    public NeoMail bcc(String... bccs) {
+        this.bccs = bccs;
+        return this;
+    }
+
 
     public NeoMail config(String smtp, String username, String password) throws IOException {
         this.username = username;
@@ -83,9 +96,29 @@ public class NeoMail {
     }
 
     public void send() throws IOException {
-        writer.println("RCPT TO: <" + to + ">");
-        System.out.println(bufferedReader.readLine());
+        // to
+        StringBuilder to = new StringBuilder();
+        for (int i = 0; i < tos.length; i++) {
+            writer.println("RCPT TO: <" + tos[i] + ">");
+            System.out.println(bufferedReader.readLine());
+            to.append(i >= 1 ? ", " + tos[i] : tos[i]);
+        }
+        // cc
+        StringBuilder cc = new StringBuilder();
+        for (int i = 0; i < ccs.length; i++) {
+            writer.println("RCPT TO: <" + ccs[i] + ">");
+            System.out.println(bufferedReader.readLine());
+            cc.append(i >= 1 ? ", " + ccs[i] : ccs[i]);
+        }
+        // bcc
+        StringBuilder bcc = new StringBuilder();
+        for (int i = 0; i < bccs.length; i++) {
+            writer.println("RCPT TO: <" + bccs[i] + ">");
+            System.out.println(bufferedReader.readLine());
+            bcc.append(i >= 1 ? ", " + bccs[i] : bccs[i]);
+        }
 
+        // main
         writer.println("DATA");
         System.out.println(bufferedReader.readLine());
 
@@ -103,6 +136,12 @@ public class NeoMail {
         writer.println("Content-Transfer-Encoding: base64");
         writer.println("FROM: " + from + "<" + username + ">");
         writer.println("TO: " + to);
+        if (!"".equals(cc.toString())) {
+            writer.println("Cc: " + cc);
+        }
+        if (!"".equals(bcc.toString())) {
+            writer.println("Bcc: " + bcc);
+        }
         writer.println("SUBJECT: " + subject);
         writer.println();
         writer.println(content);

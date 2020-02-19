@@ -101,4 +101,24 @@ public class NeoMailTest {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 群发邮件，包括抄送和密送
+     */
+    @Test
+    public void sendCcAndBccTest() {
+        NeoMail neoMail = new NeoMail();
+        try {
+            neoMail.config("smtp.qq.com", username, password)
+                    .subject("这是一封测试抄送密送的邮件")
+                    .from("Neo")
+                    .to("mail1", "mail2")
+                    .cc("mail3", "mail4")
+                    .bcc("mail5", "mail6")
+                    .text("这是内容")
+                    .send();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
