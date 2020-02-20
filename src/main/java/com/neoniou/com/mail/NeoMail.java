@@ -51,12 +51,11 @@ public class NeoMail {
         return this;
     }
 
-
-    public NeoMail config(String smtp, String username, String password) throws IOException {
+    public NeoMail config(MailSmtp mailSmtp, String username, String password) throws IOException {
         this.username = username;
 
         // Create socket connection
-        socket = new Socket(smtp, 25);
+        socket = new Socket(mailSmtp.getSmtp(), mailSmtp.getPort());
         InputStream inputStream = socket.getInputStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         bufferedReader = new BufferedReader(inputStreamReader);
@@ -136,10 +135,10 @@ public class NeoMail {
         writer.println("Content-Transfer-Encoding: base64");
         writer.println("FROM: " + from + "<" + username + ">");
         writer.println("TO: " + to);
-        if (!"".equals(cc.toString())) {
+        if (ccs.length > 0) {
             writer.println("Cc: " + cc);
         }
-        if (!"".equals(bcc.toString())) {
+        if (bccs.length > 0) {
             writer.println("Bcc: " + bcc);
         }
         writer.println("SUBJECT: " + subject);

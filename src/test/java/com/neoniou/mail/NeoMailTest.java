@@ -2,6 +2,7 @@ package com.neoniou.mail;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
+import com.neoniou.com.mail.MailSmtp;
 import com.neoniou.com.mail.NeoMail;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class NeoMailTest {
     public void sendTextTest() {
         NeoMail neoMail = new NeoMail();
         try {
-            neoMail.config("smtp.qq.com", username, password)
+            neoMail.config(MailSmtp.QQ, username, password)
                     .subject("这是一封测试简单文本邮件")
                     .from("Neo")
                     .to("me@neow.cc")
@@ -60,7 +61,7 @@ public class NeoMailTest {
     public void sendHtmlTest() {
         NeoMail neoMail = new NeoMail();
         try {
-            neoMail.config("smtp.qq.com", username, password)
+            neoMail.config(MailSmtp.QQ, username, password)
                     .subject("这是一封测试简单Html邮件")
                     .from("Neo")
                     .to("me@neow.cc")
@@ -91,7 +92,7 @@ public class NeoMailTest {
             String html = writer.toString();
 
             //发送邮件
-            neoMail.config("smtp.qq.com", username, password)
+            neoMail.config(MailSmtp.QQ, username, password)
                     .subject("这是一封测试Pebble邮件")
                     .from("Neo")
                     .to("me@neow.cc")
@@ -109,7 +110,7 @@ public class NeoMailTest {
     public void sendCcAndBccTest() {
         NeoMail neoMail = new NeoMail();
         try {
-            neoMail.config("smtp.qq.com", username, password)
+            neoMail.config(MailSmtp.QQ, username, password)
                     .subject("这是一封测试抄送密送的邮件")
                     .from("Neo")
                     .to("mail1", "mail2")
