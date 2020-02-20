@@ -32,7 +32,7 @@ public void readConfig() {
 public void sendTextTest() {
     NeoMail neoMail = new NeoMail();
     try {
-        neoMail.config("smtp.qq.com", username, password)
+        neoMail.config(MailSmtp.QQ, username, password)
                 .subject("这是一封测试简单文本邮件")
                 .from("Neo")
                 .to("me@neow.cc")
@@ -50,7 +50,7 @@ public void sendTextTest() {
 public void sendHtmlTest() {
     NeoMail neoMail = new NeoMail();
     try {
-        neoMail.config("smtp.qq.com", username, password)
+        neoMail.config(MailSmtp.QQ, username, password)
                 .subject("这是一封测试简单Html邮件")
                 .from("Neo")
                 .to("me@neow.cc")
@@ -81,7 +81,7 @@ public void sendPebbleTest() {
         String html = writer.toString();
 
         //发送邮件
-        neoMail.config("smtp.qq.com", username, password)
+        neoMail.config(MailSmtp.QQ, username, password)
                 .subject("这是一封测试Pebble邮件")
                 .from("Neo")
                 .to("me@neow.cc")
@@ -99,19 +99,21 @@ public void sendPebbleTest() {
 public void sendCcAndBccTest() {
     NeoMail neoMail = new NeoMail();
     try {
-        neoMail.config("smtp.qq.com", username, password)
-            .subject("这是一封测试抄送密送的邮件")
-            .from("Neo")
-            .to("mail1", "mail2")
-            .cc("mail3", "mail4")
-            .bcc("mail5", "mail6")
-            .text("这是内容")
-            .send();
+        neoMail.config(MailSmtp.QQ, username, password)
+                .subject("这是一封测试抄送密送的邮件")
+                .from("Neo")
+                .to("mail1", "mail2")
+                .cc("mail3", "mail4")
+                .bcc("mail5", "mail6")
+                .text("这是内容")
+                .send();
     } catch (IOException e) {
         e.printStackTrace();
     }
 }
 ```
+
+
 
 ### Pebble中的test.html
 
