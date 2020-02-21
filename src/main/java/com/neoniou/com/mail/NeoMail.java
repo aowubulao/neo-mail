@@ -96,27 +96,17 @@ public class NeoMail {
 
     public void send() throws IOException {
         // to
-        StringBuilder to = new StringBuilder();
-        for (int i = 0; i < tos.length; i++) {
-            writer.println("RCPT TO: <" + tos[i] + ">");
-            System.out.println(bufferedReader.readLine());
-            to.append(i >= 1 ? ", " + tos[i] : tos[i]);
-        }
+        String to = setRcpt(tos);
         // cc
-        StringBuilder cc = new StringBuilder();
-        for (int i = 0; i < ccs.length; i++) {
-            writer.println("RCPT TO: <" + ccs[i] + ">");
-            System.out.println(bufferedReader.readLine());
-            cc.append(i >= 1 ? ", " + ccs[i] : ccs[i]);
+        String cc = null;
+        if (ccs != null) {
+            cc = setRcpt(ccs);
         }
         // bcc
-        StringBuilder bcc = new StringBuilder();
-        for (int i = 0; i < bccs.length; i++) {
-            writer.println("RCPT TO: <" + bccs[i] + ">");
-            System.out.println(bufferedReader.readLine());
-            bcc.append(i >= 1 ? ", " + bccs[i] : bccs[i]);
+        String bcc = null;
+        if (bccs != null) {
+            bcc = setRcpt(bccs);
         }
-
         // main
         writer.println("DATA");
         System.out.println(bufferedReader.readLine());
@@ -135,10 +125,10 @@ public class NeoMail {
         writer.println("Content-Transfer-Encoding: base64");
         writer.println("FROM: " + from + "<" + username + ">");
         writer.println("TO: " + to);
-        if (ccs.length > 0) {
+        if (ccs != null) {
             writer.println("Cc: " + cc);
         }
-        if (bccs.length > 0) {
+        if (bccs != null) {
             writer.println("Bcc: " + bcc);
         }
         writer.println("SUBJECT: " + subject);
@@ -150,5 +140,21 @@ public class NeoMail {
         System.out.println(bufferedReader.readLine());
 
         socket.close();
+    }
+
+    /**
+     * set RCPT
+     * @param rcpt
+     * @return
+     * @throws IOException
+     */
+    private String setRcpt(String[] rcpt) throws IOException {
+        StringBuilder mails = new StringBuilder();
+        for (int i = 0; i < rcpt.length; i++) {
+            writer.println("RCPT TO: <" + rcpt[i] + ">");
+            System.out.println(bufferedReader.readLine());
+            mails.append(i >= 1 ? ", " + rcpt[i] : rcpt[i]);
+        }
+        return mails.toString();
     }
 }
