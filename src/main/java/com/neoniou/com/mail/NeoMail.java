@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.Socket;
 
 /**
+ * A java mail library based on socket connection
+ *
  * @author Neo.Zzj
  */
 public class NeoMail {
@@ -94,20 +96,28 @@ public class NeoMail {
         return this;
     }
 
+    /**
+     * Send mail
+     *
+     * @throws IOException
+     */
     public void send() throws IOException {
-        // to
+        if (tos == null) {
+            throw new NullPointerException("Please set the recipients!");
+        }
+
         String to = setRcpt(tos);
-        // cc
+
         String cc = null;
         if (ccs != null) {
             cc = setRcpt(ccs);
         }
-        // bcc
+
         String bcc = null;
         if (bccs != null) {
             bcc = setRcpt(bccs);
         }
-        // main
+
         writer.println("DATA");
         System.out.println(bufferedReader.readLine());
 
@@ -119,11 +129,11 @@ public class NeoMail {
             writer.println("Content-Type: text/html; charset=\"UTF-8\"");
             content = Base64Util.encode(html);
         } else {
-            throw new IOException();
+            throw new NullPointerException("Please set the content of e-mail!");
         }
 
         writer.println("Content-Transfer-Encoding: base64");
-        writer.println("FROM: " + from + "<" + username + ">");
+        writer.println("FROM: " + (from == null ? "neo-mail" : from) + "<" + username + ">");
         writer.println("TO: " + to);
         if (ccs != null) {
             writer.println("Cc: " + cc);
@@ -131,7 +141,9 @@ public class NeoMail {
         if (bccs != null) {
             writer.println("Bcc: " + bcc);
         }
-        writer.println("SUBJECT: " + subject);
+        if (subject != null) {
+            writer.println("SUBJECT: " + subject);
+        }
         writer.println();
         writer.println(content);
         writer.println(".");
@@ -142,12 +154,6 @@ public class NeoMail {
         socket.close();
     }
 
-    /**
-     * set RCPT
-     * @param rcpt
-     * @return
-     * @throws IOException
-     */
     private String setRcpt(String[] rcpt) throws IOException {
         StringBuilder mails = new StringBuilder();
         for (int i = 0; i < rcpt.length; i++) {
