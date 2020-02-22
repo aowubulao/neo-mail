@@ -25,34 +25,93 @@ public class NeoMail {
     private String[] bccs = null;
     private String subject;
 
+    /**
+     * Constructor
+     */
     public NeoMail() {
     }
 
+    /**
+     * Set mail's subject
+     *
+     * @param subject mail subject
+     */
     public NeoMail subject(String subject) {
         this.subject = subject;
         return this;
     }
 
+    /**
+     * Set mail from
+     *
+     * @param from from mail
+     */
     public NeoMail from(String from) {
         this.from = from;
         return this;
     }
 
+    /**
+     * Set mail to
+     *
+     * @param tos mail recipients
+     */
     public NeoMail to(String... tos) {
         this.tos = tos;
         return this;
     }
 
+    /**
+     * Set cc
+     *
+     * @param ccs cc
+     */
     public NeoMail cc(String... ccs) {
         this.ccs = ccs;
         return this;
     }
 
+    /**
+     * Set Bcc
+     *
+     * @param bccs Bcc
+     */
     public NeoMail bcc(String... bccs) {
         this.bccs = bccs;
         return this;
     }
 
+    /**
+     * Set text mail
+     *
+     * @param text text content
+     */
+    public NeoMail text(String text) {
+        this.text = text;
+        this.html = null;
+        return this;
+    }
+
+    /**
+     * Set html mail
+     *
+     * @param html html content
+     * @return
+     */
+    public NeoMail html(String html) {
+        this.html = html;
+        this.text = null;
+        return this;
+    }
+
+    /**
+     * Config
+     *
+     * @param mailSmtp mail server smtp address and port
+     * @param username mail address
+     * @param password mail password
+     * @throws IOException IOException
+     */
     public NeoMail config(MailSmtp mailSmtp, String username, String password) throws IOException {
         this.username = username;
 
@@ -84,22 +143,10 @@ public class NeoMail {
         return this;
     }
 
-    public NeoMail text(String text) {
-        this.text = text;
-        this.html = null;
-        return this;
-    }
-
-    public NeoMail html(String html) {
-        this.html = html;
-        this.text = null;
-        return this;
-    }
-
     /**
      * Send mail
      *
-     * @throws IOException
+     * @throws IOException IOException
      */
     public void send() throws IOException {
         if (tos == null) {
