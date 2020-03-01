@@ -8,6 +8,18 @@
 
 ## 快速开始
 
+**· Maven坐标**
+
+```
+<dependency>
+    <groupId>com.neoniou</groupId>
+    <artifactId>neo-mail</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+**· 使用实例**
+
 ```java
 /**
  * 可以通过 properties文件读取配置
