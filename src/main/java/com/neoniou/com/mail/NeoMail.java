@@ -96,7 +96,6 @@ public class NeoMail {
      * Set html mail
      *
      * @param html html content
-     * @return
      */
     public NeoMail html(String html) {
         this.html = html;
@@ -131,14 +130,14 @@ public class NeoMail {
         System.out.println(bufferedReader.readLine());
 
         writer.println("AUTH LOGIN");
-        System.out.println(bufferedReader.readLine());
+        bufferedReader.readLine();
         writer.println(Base64Util.encode(username));
-        System.out.println(bufferedReader.readLine());
+        bufferedReader.readLine();
         writer.println(Base64Util.encode(password));
-        System.out.println(bufferedReader.readLine());
+        bufferedReader.readLine();
 
         writer.println("MAIL FROM: <" + username + ">");
-        System.out.println(bufferedReader.readLine());
+        bufferedReader.readLine();
 
         return this;
     }
@@ -166,7 +165,7 @@ public class NeoMail {
         }
 
         writer.println("DATA");
-        System.out.println(bufferedReader.readLine());
+        bufferedReader.readLine();
 
         String content;
         if (text != null && html == null) {
@@ -180,7 +179,9 @@ public class NeoMail {
         }
 
         writer.println("Content-Transfer-Encoding: base64");
-        writer.println("FROM: " + (from == null ? "neo-mail" : from) + "<" + username + ">");
+        String fromMessage = "FROM: " + (from == null ? "neo-mail" : from) + "<" + username + ">";
+        writer.println(fromMessage);
+        System.out.println(fromMessage);
         writer.println("TO: " + to);
         if (ccs != null) {
             writer.println("Cc: " + cc);
@@ -194,18 +195,19 @@ public class NeoMail {
         writer.println();
         writer.println(content);
         writer.println(".");
-
-        writer.println("QUIT");
         System.out.println(bufferedReader.readLine());
-
+        writer.println("QUIT");
+        bufferedReader.readLine();
         socket.close();
     }
 
     private String setRcpt(String[] rcpt) throws IOException {
         StringBuilder mails = new StringBuilder();
         for (int i = 0; i < rcpt.length; i++) {
-            writer.println("RCPT TO: <" + rcpt[i] + ">");
-            System.out.println(bufferedReader.readLine());
+            String rcptMessage = "RCPT TO: <" + rcpt[i] + ">";
+            writer.println(rcptMessage);
+            bufferedReader.readLine();
+            System.out.println(rcptMessage);
             mails.append(i >= 1 ? ", " + rcpt[i] : rcpt[i]);
         }
         return mails.toString();
