@@ -2,6 +2,7 @@ package com.neoniou.com.mail;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
 
 /**
  * A java mail library based on socket connection
@@ -18,6 +19,9 @@ public class NeoMail {
 
     private String text = null;
     private String html = null;
+
+    private String attachment = null;
+    private String fileName = null;
 
     private String from;
     private String[] tos;
@@ -100,6 +104,26 @@ public class NeoMail {
     public NeoMail html(String html) {
         this.html = html;
         this.text = null;
+        return this;
+    }
+
+    /**
+     * Set mail attachment
+     *
+     * @param filePath file path
+     * @throws IOException IOException
+     */
+    public NeoMail attach(String filePath) throws IOException {
+        File file = new File(filePath);
+        fileName = file.getName();
+
+        // Read file and encode to Base64
+        FileInputStream fileInputStream = new FileInputStream(file);
+        byte[] bytes = new byte[(int) file.length()];
+        int read = fileInputStream.read(bytes);
+        fileInputStream.close();
+        attachment = Base64Util.encode(Arrays.toString(bytes));
+
         return this;
     }
 

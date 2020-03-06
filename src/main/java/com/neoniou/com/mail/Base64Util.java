@@ -11,11 +11,21 @@ import java.util.Arrays;
  */
 public class Base64Util {
 
+    /**
+     * Encode content
+     * @param code content
+     * @return encoded content
+     */
     public static String encode(String code) {
         BASE64Encoder encoder = new BASE64Encoder();
         return encoder.encode(code.getBytes());
     }
 
+    /**
+     * Decode content
+     * @param code content
+     * @return decoded content
+     */
     public static String decode(String code) {
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] bytes = new byte[0];
