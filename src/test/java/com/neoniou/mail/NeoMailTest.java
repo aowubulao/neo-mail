@@ -122,4 +122,23 @@ public class NeoMailTest {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 发送带附件的邮件
+     */
+    @Test
+    public void sendAttachMail() {
+        NeoMail neoMail = new NeoMail();
+        try {
+            neoMail.config(MailSmtp.QQ, username, password)
+                    .subject("这是一封测试附件的邮件")
+                    .from("Neo")
+                    .to("me@neow.cc")
+                    .text("这是内容")
+                    .attach("E:\\3.zip")
+                    .send();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
