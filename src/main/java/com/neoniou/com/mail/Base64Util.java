@@ -1,10 +1,7 @@
 package com.neoniou.com.mail;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
-import java.io.IOException;
 import java.util.Arrays;
+import java.util.Base64;
 
 /**
  * @author Neo.Zzj
@@ -17,8 +14,8 @@ public class Base64Util {
      * @return encoded content
      */
     public static String encode(String code) {
-        BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(code.getBytes());
+        Base64.Encoder encoder = Base64.getEncoder();
+        return encoder.encodeToString(code.getBytes());
     }
 
     /**
@@ -27,13 +24,8 @@ public class Base64Util {
      * @return decoded content
      */
     public static String decode(String code) {
-        BASE64Decoder decoder = new BASE64Decoder();
-        byte[] bytes = new byte[0];
-        try {
-            bytes = decoder.decodeBuffer(code);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Base64.Decoder decoder = Base64.getDecoder();
+        byte[] bytes = decoder.decode(code);
         return Arrays.toString(bytes);
     }
 }
