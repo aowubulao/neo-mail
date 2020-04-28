@@ -43,7 +43,7 @@ public class NeoMailTest {
     public void sendTextTest() {
         NeoMail neoMail = new NeoMail();
         try {
-            neoMail.config(MailSmtp.QQ, username, password)
+            neoMail.config("smtp.qq.com", 25, username, password)
                     .subject("这是一封测试简单文本邮件")
                     .from("Neo")
                     .to("me@neow.cc")

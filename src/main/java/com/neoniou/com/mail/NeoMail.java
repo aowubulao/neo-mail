@@ -137,9 +137,27 @@ public class NeoMail {
      */
     public NeoMail config(MailSmtp mailSmtp, String username, String password) throws IOException {
         this.username = username;
+        this.connect(mailSmtp.getSmtp(), mailSmtp.getPort(), password);
+        return this;
+    }
 
+    public NeoMail config(String host, int port, String username, String password) throws IOException {
+        this.username = username;
+        this.connect(host, port, password);
+        return this;
+    }
+
+    /**
+     * Connect to host
+     *
+     * @param host Smtp host
+     * @param post Smtp port
+     * @param password Mail passwd
+     * @throws IOException
+     */
+    private void connect(final String host, final int post, final String password) throws IOException {
         // Create socket connection
-        socket = new Socket(mailSmtp.getSmtp(), mailSmtp.getPort());
+        socket = new Socket(host, post);
         InputStream inputStream = socket.getInputStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         bufferedReader = new BufferedReader(inputStreamReader);
@@ -162,8 +180,6 @@ public class NeoMail {
 
         writer.println("MAIL FROM: <" + username + ">");
         bufferedReader.readLine();
-
-        return this;
     }
 
     /**
